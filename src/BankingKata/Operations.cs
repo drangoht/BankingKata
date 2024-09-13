@@ -37,14 +37,12 @@ namespace BankingKata
 
         private Amount OperationTypeToAmount(Amount amount, OperationType operationType)
         {
-            switch (operationType)
+            return operationType switch
             {
-                case OperationType.Deposit:
-                    return new Amount(amount.Value);
-                case OperationType.WithDraw:
-                    return new Amount(-1 * amount.Value);
-            }
-            return new Amount(amount.Value);
+                OperationType.Deposit => new Amount(amount.Value),
+                OperationType.WithDraw => new Amount(-1 * amount.Value),
+                _ => new Amount(amount.Value),
+            };
         }
 
         public Amount GetBalance()

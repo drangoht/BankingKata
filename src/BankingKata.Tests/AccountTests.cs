@@ -20,7 +20,7 @@ namespace BankingKata.Tests
             account.Deposit(operationAmount);
 
             Amount balance = account.GetBalance();
-            Assert.Equal(balance.Value, attendedBalance);
+            Assert.Equal(attendedBalance, balance.Value);
         }
         [Fact]
         public void Should_Return_Correct_Balance_When_WithDraw_Amount()
@@ -32,7 +32,7 @@ namespace BankingKata.Tests
             account.WithDraw(operationAmount);
 
             Amount balance = account.GetBalance();
-            Assert.Equal(attendedBalance,balance.Value);
+            Assert.Equal(attendedBalance, balance.Value);
         }
         [Fact]
         public void Should_Return_Correct_Balance_When_Deposit_Then_WithDraw_Amount()
@@ -43,7 +43,7 @@ namespace BankingKata.Tests
             Account account = new Account(objServiceDate.Object);
             account.Deposit(operationAmount);
             Amount balance = account.GetBalance();
-            Assert.Equal(balance.Value, attendedBalance);
+            Assert.Equal(attendedBalance, balance.Value);
 
             operationAmount = 20;
             attendedBalance = 80;
@@ -61,20 +61,20 @@ namespace BankingKata.Tests
             int attendedWithdrawBalance = 80;
 
             List<Operation> attendedOperations = new List<Operation>();
-            attendedOperations.Add(new(1,DateTime.UtcNow, new Amount(operationDepositAmount), new Amount(attendedDepositBalance)));
-            attendedOperations.Add(new(2,DateTime.UtcNow, new Amount(-operationWithdrawAmount), new Amount(attendedWithdrawBalance)));
+            attendedOperations.Add(new(1, DateTime.UtcNow, new Amount(operationDepositAmount), new Amount(attendedDepositBalance)));
+            attendedOperations.Add(new(2, DateTime.UtcNow, new Amount(-operationWithdrawAmount), new Amount(attendedWithdrawBalance)));
 
             objServiceDate.Setup(setup => setup.GetDate()).Returns(DateTime.UtcNow);
             Account account = new Account(objServiceDate.Object);
 
             account.Deposit(operationDepositAmount);
             Amount balance = account.GetBalance();
-            Assert.Equal(attendedDepositBalance,balance.Value);
+            Assert.Equal(attendedDepositBalance, balance.Value);
 
-            
+
             account.WithDraw(operationWithdrawAmount);
             balance = account.GetBalance();
-            Assert.Equal(attendedWithdrawBalance,balance.Value);
+            Assert.Equal(attendedWithdrawBalance, balance.Value);
 
             List<Operation> operations = account.GetOperations();
             Assert.Equal(attendedOperations.Count, operations.Count);
@@ -118,17 +118,45 @@ namespace BankingKata.Tests
             objServiceDate.Setup(setup => setup.GetDate()).Returns(depositDate);
             account.Deposit(operationDepositAmount);
             Amount balance = account.GetBalance();
-            Assert.Equal(attendedDepositBalance,balance.Value);
+            Assert.Equal(attendedDepositBalance, balance.Value);
 
             objServiceDate.Setup(setup => setup.GetDate()).Returns(withDrawDate);
             account.WithDraw(operationWithdrawAmount);
 
             balance = account.GetBalance();
-            Assert.Equal(attendedWithdrawBalance,balance.Value);
+            Assert.Equal(attendedWithdrawBalance, balance.Value);
 
             var statement = account.PrintStatement();
             Assert.Equal(attendedStatement, statement);
-            
+
+        }
+
+        [Fact]
+        public void Should_Return_Zero_When_GetBalance_With_No_Operations()
+        {
+            int attendedBalance = 0;
+            objServiceDate.Setup(setup => setup.GetDate()).Returns(DateTime.UtcNow);
+            Account account = new Account(objServiceDate.Object);
+            Amount balance = account.GetBalance();
+            Assert.Equal(attendedBalance, balance.Value);
+        }
+
+        [Fact]
+        public void Should_Throw_Exception_When_Deposit_With_Negative_Number()
+        {
+            int attendedBalance = 0;
+            objServiceDate.Setup(setup => setup.GetDate()).Returns(DateTime.UtcNow);
+            Account account = new Account(objServiceDate.Object);
+            Assert.Throws<Exception>(() => account.Deposit(-1));
+        }
+
+        [Fact]
+        public void Should_Throw_Exception_When_Withdraw_With_Negative_Number()
+        {
+            int attendedBalance = 0;
+            objServiceDate.Setup(setup => setup.GetDate()).Returns(DateTime.UtcNow);
+            Account account = new Account(objServiceDate.Object);
+            Assert.Throws<Exception>(() => account.WithDraw(-1));
         }
     }
 }
