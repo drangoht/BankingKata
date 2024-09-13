@@ -9,11 +9,11 @@ namespace BankingKata
 {
     public class Account : IAccount
     {
-        private Operations _operations = new Operations();
-
-        public Account()
+ 
+        private Operations? _operations ;
+        public Account(IServiceDate date)
         {
-            Operations _operations = new Operations();
+            _operations = new Operations(date);
         }
 
         public void Deposit(int amount) =>
@@ -24,10 +24,17 @@ namespace BankingKata
             return _operations.GetBalance();
         }
 
+        public List<Operation> GetOperations() =>  _operations.List();
 
-        public void PrintStatement()
+
+        public string PrintStatement()
         {
-            throw new NotImplementedException();
+            string statement = "Date\tAmount\tBalance\n";
+            foreach (var op in _operations.List())
+            {
+                statement += $"{op.OperationDate.ToString("dd.M.yyyy")}\t{op.OperationAmount.Value}\t{op.Balance.Value}\n";  
+            }
+            return statement;
         }
 
         public void WithDraw(int amount) =>

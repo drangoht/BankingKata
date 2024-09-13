@@ -11,7 +11,8 @@ namespace BankingKata
     {
         public void Deposit(int amount);
         public void WithDraw(int amount);
-        public void PrintStatement();
+        public string PrintStatement();
+        public List<Operation> GetOperations();
         public Amount GetBalance();
     }
 }

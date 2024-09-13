@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace BankingKata
 {
-    public record Operation(DateTime OperationDate, Amount OperationAmount,Amount Balance);
+    public record Operation(int OperationNumber, DateTime OperationDate, Amount OperationAmount,Amount Balance);
 }

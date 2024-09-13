@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace BankingKata
 {
-    public record Amount(int Value);
+    public interface IServiceDate
+    {
+        public DateTime GetDate();
+    }
 }

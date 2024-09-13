@@ -6,5 +6,11 @@ using System.Threading.Tasks;
 
 namespace BankingKata
 {
-    public record Amount(int Value);
+    public class ServiceDate : IServiceDate
+    {
+        public DateTime GetDate()
+        {
+            return DateTime.UtcNow;
+        }
+    }
 }
